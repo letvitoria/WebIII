@@ -12,8 +12,16 @@
             <li><a href="{{ url_for('index') }}">Página Inicial</a></li>
             <li><a href="{{ url_for('contato') }}">Contatos</a></li>
             <li><a href="{{ url_for('dados_usuario') }}">Usuário</a></li>
+            <li><a href="{{ url_for('formulario') }}">Formulário</a></li>
+            <li><a href="{{ url_for('login') }}">Login</a></li>
         </ul>
     </nav>
+
+    {% with mensagens = get_flashed_messages(with_categories=true) %}
+        {% for categoria, mensagem in mensagens %}
+            <p class="mensagem-flash {{ categoria }}">{{ mensagem }}</p>
+        {% endfor %}
+    {% endwith %}
 
     {% block conteudo %}
     {% endblock %}
