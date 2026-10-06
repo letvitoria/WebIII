@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, flash, redirect, render_template, request, url_for
+from flask import Flask, flash, redirect, render_template, request, session, url_for
 
 
 app_Leticia = Flask(__name__, template_folder="t_templates")
@@ -97,10 +97,27 @@ def login():
         usuario = request.form.get("usuario", "").strip()
         senha = request.form.get("senha", "")
         if usuario == "admin" and senha == "1234":
+            session["usuario"] = usuario
             flash("Login realizado com sucesso.", "sucesso")
             return redirect(url_for("index"))
         flash("Usuario ou senha invalidos.", "erro")
     return render_template("login.html")
+
+
+# Versao 8: sessao, rota protegida e encerramento do login.
+@app_Leticia.route("/area-restrita")
+def area_restrita():
+    if "usuario" not in session:
+        flash("Faça login para acessar esta área.", "erro")
+        return redirect(url_for("login"))
+    return render_template("area_restrita.html", usuario=session["usuario"])
+
+
+@app_Leticia.route("/logout")
+def logout():
+    session.pop("usuario", None)
+    flash("Logout realizado com sucesso.", "sucesso")
+    return redirect(url_for("login"))
 
 
 if __name__ == "__main__":
