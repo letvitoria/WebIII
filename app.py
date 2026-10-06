@@ -47,6 +47,19 @@ def dados_usuario_url(nome, profissao):
     return render_template("usuario.html", dados=dados_usu)
 
 
+# Versao 6: rota de API que retorna dados estruturados em JSON.
+@app_Leticia.route("/api/usuarios")
+def api_usuarios():
+    usuarios = [
+        {
+            "nome": "Leticia",
+            "profissao": "Estudante",
+            "disciplina": "Desenvolvimento Web III",
+        }
+    ]
+    return {"usuarios": usuarios}
+
+
 # Versao 4: formularios com os metodos GET e POST.
 @app_Leticia.route("/formulario", methods=["GET", "POST"])
 def formulario():
