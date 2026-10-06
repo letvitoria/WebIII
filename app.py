@@ -26,5 +26,21 @@ def dados_usuario():
     return render_template("usuario.html", dados=dados_usu)
 
 
+# Versao 3: dados dinamicos recebidos diretamente pela URL.
+@app_Leticia.route("/ola/<id>")
+def saudacao(id):
+    return render_template("t_index.html", nome=id)
+
+
+@app_Leticia.route("/usuario/<nome>;<profissao>")
+def dados_usuario_url(nome, profissao):
+    dados_usu = {
+        "nome": nome,
+        "profissao": profissao,
+        "disciplina": "Desenvolvimento Web III",
+    }
+    return render_template("usuario.html", dados=dados_usu)
+
+
 if __name__ == "__main__":
     app_Leticia.run(port=7000, debug=True)
