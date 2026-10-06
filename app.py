@@ -47,17 +47,33 @@ def dados_usuario_url(nome, profissao):
     return render_template("usuario.html", dados=dados_usu)
 
 
-# Versao 6: rota de API que retorna dados estruturados em JSON.
-@app_Leticia.route("/api/usuarios")
+usuarios_api = [
+    {
+        "nome": "Leticia",
+        "profissao": "Estudante",
+        "disciplina": "Desenvolvimento Web III",
+    }
+]
+
+
+# Versao 7: API com leitura e cadastro de usuarios em memoria.
+@app_Leticia.route("/api/usuarios", methods=["GET", "POST"])
 def api_usuarios():
-    usuarios = [
-        {
-            "nome": "Leticia",
-            "profissao": "Estudante",
-            "disciplina": "Desenvolvimento Web III",
-        }
-    ]
-    return {"usuarios": usuarios}
+    if request.method == "GET":
+        return {"usuarios": usuarios_api}
+
+    novo_usuario = request.get_json(silent=True) or {}
+    campos_obrigatorios = ("nome", "profissao", "disciplina")
+    if any(not novo_usuario.get(campo) for campo in campos_obrigatorios):
+        return {
+            "erro": "Informe nome, profissao e disciplina."
+        }, 400
+
+    usuario = {
+        campo: novo_usuario[campo].strip() for campo in campos_obrigatorios
+    }
+    usuarios_api.append(usuario)
+    return usuario, 201
 
 
 # Versao 4: formularios com os metodos GET e POST.
